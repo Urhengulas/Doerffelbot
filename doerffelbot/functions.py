@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from urllib3 import PoolManager
+import requests
 from yahooweather import YahooWeather, UNIT_C
 from emoji import emojize
 import pickle
+import CONFIG as conf
 
 
 # reaction for "/start"
@@ -57,14 +58,16 @@ def links(bot, update):
 
 
 def download_vertretung():
+
+    url = "https://doerffelgymnasium.de/vplan/Vertretung.pdf"
+
+    r = requests.get(url, auth=(conf.vplan["username"], conf.vplan["password"]), stream=True)
+
+    with open("data/vertretung.pdf", 'wb') as doc:
+        for chunk in r.iter_content(chunk_size=128):
+            doc.write(chunk)
     
-    url = 'www.doerffelgymnasium.de/leitung/vertretung.pdf'
-    http = PoolManager()
-    resp = http.request('GET', url, preload_content=False)
-    with open("Vertretung.pdf", 'wb') as doc:
-        doc.write(resp.data)
-    resp.release_conn()
-    print(file.name, "wurde heruntergeladen")
+        print(doc.name, "wurde heruntergeladen")
 
 
 # reaction for "/vertretung"
@@ -75,7 +78,7 @@ def vertretung(bot, update):
     download_vertretung()
 
     bot.sendDocument(chat_id=update.message.chat_id,
-                     document=open("Vertretung.pdf", 'rb'))
+                     document=open("data/vertretung.pdf", 'rb'))
     print("und zu "+gotten_chat.first_name+" geschickt\n")
 
 

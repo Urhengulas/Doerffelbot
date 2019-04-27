@@ -1,4 +1,4 @@
-urllib3
+requests
 python-telegram-bot
 emoji
 autopep8

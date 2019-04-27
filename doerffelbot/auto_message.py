@@ -19,7 +19,7 @@ def daily_message(bot, job):
             bot.send_message(
                 chat_id=chat, text="Hier ist dein täglicher Vertretungsplan:")
             bot.sendDocument(chat_id=chat, document=open(
-                "Vertretung.pdf", 'rb'))
+                "data/vertretung.pdf", 'rb'))
             print("Vertretungsplan zu "+str(chat)+" geschickt\n")
         except:
             print("Konnte Vertretungsplan nicht zu"+str(chat)+"senden.")
