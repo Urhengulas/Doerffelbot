@@ -2,6 +2,7 @@ data/ids.set
 data/Vertretung.pdf
 
 important.log
+CONFIG.py
 __pycache__/
 env/
 .vscode/

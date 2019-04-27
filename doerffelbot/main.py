@@ -5,16 +5,12 @@ import logging
 from . import functions as func
 from . import auto_message as zet
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-import configparser
+import CONFIG as conf
 
 
-configParser = configparser.ConfigParser()
-configParser.read('important.log')
-config = configParser['DEFAULT']
-
-TOKEN = config['TOKEN'] #Token von @doerffelbot
-old_TOKEN = config['old_TOKEN'] #Token von @johannstodobot
-my_chat_id = config['my-chat-id'] #my own telegram-'chat id'
+TOKEN = conf.TOKEN #Token von @doerffelbot
+old_TOKEN = conf.old_TOKEN #Token von @johannstodobot
+my_chat_id = conf.my_chat_id #my own telegram-'chat id'
 
 updater = Updater(token=TOKEN) #erstellt den updater --> verarbeitet neue Nachrichten
 dispatcher = updater.dispatcher #erstellt dispatcher
