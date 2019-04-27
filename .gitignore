@@ -3,4 +3,5 @@ data/Vertretung.pdf
 
 important.log
 __pycache__/
+env/
 .vscode/

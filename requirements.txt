@@ -1,0 +1,5 @@
+urllib3
+python-telegram-bot
+emoji
+autopep8
+yahooweather
