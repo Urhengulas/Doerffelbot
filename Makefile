@@ -1,3 +1,6 @@
+run:
+	python -m doerffelbot.main
+
 dep:
 	# check if virtualenv `env` exists
 	if [ ! -d "env" ];then virtualenv env;fi
