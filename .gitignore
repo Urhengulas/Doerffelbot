@@ -1,3 +1,6 @@
-*.log
-*.set
-Vertretung.pdf
+data/ids.set
+data/Vertretung.pdf
+
+important.log
+__pycache__/
+.vscode/
