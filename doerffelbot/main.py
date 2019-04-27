@@ -8,60 +8,57 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import CONFIG as conf
 
 
-TOKEN = conf.TOKEN #Token von @doerffelbot
-old_TOKEN = conf.old_TOKEN #Token von @johannstodobot
-my_chat_id = conf.my_chat_id #my own telegram-'chat id'
+TOKEN = conf.TOKEN  # Token of @doerffelbot
+old_TOKEN = conf.old_TOKEN  # Token of @johannstodobot
+my_chat_id = conf.my_chat_id  # my own telegram-'chat id'
 
-updater = Updater(token=TOKEN) #erstellt den updater --> verarbeitet neue Nachrichten
-dispatcher = updater.dispatcher #erstellt dispatcher
+# init updater: handle incoming messages
+updater = Updater(token=TOKEN)
+dispatcher = updater.dispatcher
 
+# configure error message logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO) #logging ist f�r Fehlermeldungen
+                    level=logging.INFO)
+
+# register all commands of the bot
+
+start_handler = CommandHandler('start', func.start)
+dispatcher.add_handler(start_handler)
 
 
-#fügt die Reaktion auf den Befehl "/start" hinzu
-start_handler = CommandHandler('start', func.start) #weist dem Befehl /start die Methode start zu
-dispatcher.add_handler(start_handler) #f�gt diesen Handler hinzu
+help_handler = CommandHandler('help', func.helpme)
+dispatcher.add_handler(help_handler)
 
 
-#fügt die Reaktion auf den Befehl "/help" hinzu
-help_handler = CommandHandler('help', func.helpme) #weist dem Befehl /help die methode help zu
-dispatcher.add_handler(help_handler) #fügt diesen Handler hinzu
+link_handler = CommandHandler('links', func.links)
+dispatcher.add_handler(link_handler)
 
 
-#f�gt die Reaktion auf den Befehl "/links" hinzu
-link_handler = CommandHandler('links', func.links) #weist dem Befehl /links die methode links zu
-dispatcher.add_handler(link_handler) #f�gt diesen Handler hinzu
+vertretung_handler = CommandHandler('vertretung', func.vertretung)
+dispatcher.add_handler(vertretung_handler)
 
 
-#f�gt die Reaktion auf den Befehl "/vertretung" hinzu
-vertretung_handler = CommandHandler('vertretung', func.vertretung) #wei�t dem befehl /vertretung die methode vertretung zu
-dispatcher.add_handler(vertretung_handler) #f�gt diesen Handler hinzu
+wetter_handler = CommandHandler('wetter', func.wetter)
+dispatcher.add_handler(wetter_handler)
 
 
-#f�gt die Reaktion auf den Befehl "/wetter" hinzu
-wetter_handler = CommandHandler('wetter', func.wetter) #weist dem Befehl /wetter die methode wetter zu
-dispatcher.add_handler(wetter_handler) #f�gt diesen Handler hinzu
+echo_handler = MessageHandler(Filters.text, func.react)
+dispatcher.add_handler(echo_handler)
 
 
-#react to all non-commands
-echo_handler = MessageHandler(Filters.text, func.react) #weist allen Texten die Methode vertretung zu
-dispatcher.add_handler(echo_handler) #f�gt diesen Handler hinzu
+# init job queue: handles all schedules actions
+jobq = updater.job_queue
 
-
-#Zeitsteuerung
-jobq = updater.job_queue #erstellt die job_queue --> alle geplant ablaufenden Arbeitsschritte
-
+# register daily substitution plan
 job_daily = jobq.run_daily(callback=zet.daily_message,
-                           time=datetime.time(hour=10,minute=35)) #t�gliches senden um hour:minute Uhr
+                           time=datetime.time(hour=10, minute=35))
 
-##########################################################################################################
 
 def main():
-    updater.start_polling() #der Bot f�ngt an zu 'lauschen'
-    print("Dörffelbot started polling") #gibt R�ckmeldung
+    
+    updater.start_polling()  # bots goes online
+    print("Dörffelbot started polling")
 
-if __name__=='__main__':
+
+if __name__ == '__main__':
     main()
-
-##########################################################################################################
