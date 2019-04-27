@@ -2,8 +2,8 @@
 
 import datetime
 import logging
-import functions as func
-import auto_message as zet
+from . import functions as func
+from . import auto_message as zet
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import configparser
 

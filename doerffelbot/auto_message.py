@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import pickle
-import functions as func
+from . import functions as func
 
 
 #Zeitsteuerung
