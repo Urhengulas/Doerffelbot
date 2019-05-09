@@ -7,7 +7,7 @@ from . import functions as func
 # time control
 def daily_message(bot, job):
 
-    with open("../ids.set", 'rb') as doc:
+    with open("data/ids.set", 'rb') as doc:
         ids = pickle.load(doc)
 
     print("Zeitsteuerung gestartet\n")

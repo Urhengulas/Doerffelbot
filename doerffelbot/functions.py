@@ -23,14 +23,14 @@ def start(bot, update):
                                                            "but if we have some more ideas which seem usefull to us, we will implement them!\n" +
                                                            "\nPS: If you have any inspirations, please send them to Joheihe@web.de"))
 
-    with open("../ids.set", 'rb') as doc:
+    with open("data/ids.set", 'rb') as doc:
         ids = pickle.load(doc)
 
     ids.add(gotten_chat.id)
 
     print("{} wurde der chat_id-Liste hinzugefügt\nids={}\n".format(gotten_chat.first_name, ids))
 
-    with open("../ids.set", 'wb') as doc:
+    with open("data/ids.set", 'wb') as doc:
         pickle.dump(ids, doc)
 
 
