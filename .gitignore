@@ -1,7 +1,6 @@
 data/ids.set
 data/vertretung.pdf
 
-important.log
 CONFIG.py
 init_CONFIG.py
 __pycache__/
