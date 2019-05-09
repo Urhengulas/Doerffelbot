@@ -3,6 +3,7 @@ data/vertretung.pdf
 
 important.log
 CONFIG.py
+init_CONFIG.py
 __pycache__/
 env/
 .vscode/
