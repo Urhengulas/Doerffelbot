@@ -1,5 +1,5 @@
 run:
-	python -m doerffelbot.main
+	env/bin/python -m doerffelbot.main
 
 dep:
 	# check if virtualenv `env` exists
