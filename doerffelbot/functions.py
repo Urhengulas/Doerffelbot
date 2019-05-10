@@ -24,7 +24,10 @@ def start(bot, update):
                                                            "\nPS: If you have any inspirations, please send them to Joheihe@web.de"))
 
     with open("data/ids.set", 'rb') as doc:
-        ids = pickle.load(doc)
+        try:
+            ids = pickle.load(doc)
+        except:
+            ids = set()
 
     ids.add(gotten_chat.id)
 
