@@ -9,6 +9,7 @@ import CONFIG as conf
 
 
 TOKEN = conf.TOKEN  # Token of @doerffelbot
+my_chat_id = conf.my_chat_id  # my own telegram-'chat id'
 
 # init updater: handle incoming messages
 updater = Updater(token=TOKEN)
