@@ -4,5 +4,6 @@ data/vertretung.pdf
 CONFIG.py
 init_CONFIG.py
 __pycache__/
+*.pyc
 env/
 .vscode/
