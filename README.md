@@ -9,6 +9,7 @@
 
 ## About
 A telegram-bot to access the substitution plan of the Georg-Samuel-Dörffel-Gymnasium in Weida, Thuringia, Germany.
+The grammar school is cerified with the MINT-Dings.
 
 ## Getting started
 
