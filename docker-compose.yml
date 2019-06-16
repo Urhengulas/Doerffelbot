@@ -3,6 +3,6 @@ services:
   dbot:
     build: .
     volumes:
-      - "./data:/data"
+      - "./data:/app/data"
       - "./CONFIG.py:/app/CONFIG.py"
     command: "python -m doerffelbot.main"
