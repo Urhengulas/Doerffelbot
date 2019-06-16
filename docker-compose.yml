@@ -1,0 +1,8 @@
+version: "0.2"
+services:
+  dbot:
+    build: .
+    volumes:
+      - "./data:/data"
+      - "./CONFIG.py:/app/CONFIG.py"
+    command: "python -m doerffelbot.main"
