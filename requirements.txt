@@ -1,5 +1,3 @@
 requests
 python-telegram-bot
-emoji
 autopep8
-yahooweather

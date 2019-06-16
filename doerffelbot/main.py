@@ -37,10 +37,6 @@ vertretung_handler = CommandHandler('vertretung', func.vertretung)
 dispatcher.add_handler(vertretung_handler)
 
 
-wetter_handler = CommandHandler('wetter', func.wetter)
-dispatcher.add_handler(wetter_handler)
-
-
 echo_handler = MessageHandler(Filters.text, func.react)
 dispatcher.add_handler(echo_handler)
 
@@ -54,7 +50,7 @@ job_daily = jobq.run_daily(callback=zet.daily_message,
 
 
 def main():
-    
+
     updater.start_polling()  # bots goes online
     print("Dörffelbot started polling")
 
