@@ -1,4 +1,10 @@
 run:
+	make run-docker
+
+run-docker:
+	docker-compose up
+
+run-python:
 	env/bin/python -m doerffelbot.main
 
 dep:
