@@ -2,18 +2,16 @@
 
 import requests
 import pickle
-import CONFIG as conf
+
+from utilities import get_credentials
 
 
-# reaction for "/start"
 def start(bot, update):
 
     gotten_chat = bot.get_chat(chat_id=update.message.chat.id)
+    first_name = gotten_chat.first_name
+    chat_id = gotten_chat.id
 
-    print("{} hat den bot gestartet (chat_id: {})".format(
-        gotten_chat.first_name, str(gotten_chat.id)))
-
-    # welcome message
     bot.send_message(chat_id=update.message.chat_id, text=("Hello "+gotten_chat.first_name+"!\nMy name is Doerffelbot.\n" +
                                                            "I'm a student project of two awesome German students " +
                                                            "of the Georg-Samuel-Dörffel-Gymnasium in Weida.\n\n" +
@@ -21,71 +19,82 @@ def start(bot, update):
                                                            "but if we have some more ideas which seem usefull to us, we will implement them!\n" +
                                                            "\nPS: If you have any inspirations, please send them to Joheihe@web.de"))
 
-    with open("data/ids.set", 'rb') as doc:
-        try:
-            ids = pickle.load(doc)
-        except:
-            ids = set()
+    logging.info(f"{first_name} hat den bot gestartet (chat_id: {chat_id})")
 
-    ids.add(gotten_chat.id)
-
-    print("{} wurde der chat_id-Liste hinzugefügt\nids={}\n".format(gotten_chat.first_name, ids))
-
-    with open("data/ids.set", 'wb') as doc:
+    with open("data/ids.set", 'rwb') as doc:
+        ids = pickle.load(doc)
+        ids.add(gotten_chat.id)
         pickle.dump(ids, doc)
 
+    logging.info("{first_name} was added to chat_id-list\nids={ids}")
 
-# reaction for "/help"
+
 def helpme(bot, update):
 
     gotten_chat = bot.get_chat(chat_id=update.message.chat.id)
+    first_name = gotten_chat.first_name
 
-    bot.send_message(chat_id=update.message.chat_id, text=("Momentan reagiere ich nur auf die Befehle: /start, /help, /links und /vertretung. " +
-                                                           "\nSollten wir aber noch weitere Ideen haben, implementieren wir diese nat�rlich! Viel Spa�!"))
-    print(gotten_chat.first_name+" hat um Hilfe gebeten\n")
+    bot.send_message(
+            chat_id=update.message.chat_id, 
+            text=("Momentan reagiere ich nur auf die Befehle: /start, /help, /links und /vertretung.\nSollten wir aber noch weitere Ideen haben, implementieren wir diese natuerlich! Viel Spasz!"))
+    
+    logging.info(f"{first_name} asked for help")
 
 
-# reaction for "/links"
 def links(bot, update):
 
     gotten_chat = bot.get_chat(chat_id=update.message.chat.id)
+    first_name = gotten_chat.first_name
 
     bot.send_message(chat_id=update.message.chat_id, text=("Hier sind ein paar interessante Links:\n" +
                                                            " - Homepage: http://www.doerffelgymnasium.de/cms/\n" +
                                                            " - News: http://www.doerffelgymnasium.de/cms/index.php/news\n" +
                                                            " - Schulspeisung: https://www.wakos-gera.de/bestellen/schulspeisung"))
 
-    print(gotten_chat.first_name+" hat die Links angefordert\n")
+    logging.info(f"{first_name} request links")
 
 
 def download_vertretung():
 
+    _, VPLAN = get_credentials()
+
     url = "https://doerffelgymnasium.de/vplan/Vertretung.pdf"
 
-    r = requests.get(url, auth=(
-        conf.vplan["username"], conf.vplan["password"]), stream=True)
+    r = requests.get(
+            url, 
+            auth=(
+                VPLAN["user"], 
+                VPLAN["pass"]), 
+            stream=True)
 
     with open("data/vertretung.pdf", 'wb') as doc:
         for chunk in r.iter_content(chunk_size=128):
             doc.write(chunk)
 
-        print(doc.name, "wurde heruntergeladen")
+        logging.info(f"{doc.name} was downloaded and written to disk")
 
 
-# reaction for "/vertretung"
 def vertretung(bot, update):
 
     gotten_chat = bot.get_chat(chat_id=update.message.chat.id)
+    user_name = gotten_chat.first_name
+    chat_id = update.message.chat_id
 
     download_vertretung()
 
-    bot.sendDocument(chat_id=update.message.chat_id,
-                     document=open("data/vertretung.pdf", 'rb'))
-    print("und zu "+gotten_chat.first_name+" geschickt\n")
+    with open("data/vertretung.pdf", "rb") as doc:
+        bot.sendDocument(
+                chat_id=chat_id,
+                document=doc)
+    
+        logging.info(f"Send {doc.name} to {first_name}")
 
 
-# react to all non-commands
 def react(bot, update):
 
-    bot.send_message(chat_id=update.message.chat_id, text=(
-        "Hallo User, ich habe Dich leider nicht verstanden!\nTippe /help um mehr zu erfahren!"))
+    chat_id = update.message.chat_id
+
+    bot.send_message(
+            chat_id=chat_id,
+            text="Hallo User, ich habe Dich leider nicht verstanden!\nTippe /help um mehr zu erfahren!")
+

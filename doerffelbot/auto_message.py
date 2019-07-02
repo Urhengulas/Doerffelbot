@@ -1,25 +1,31 @@
 # -*- coding: utf-8 -*-
 
+import logging
 import pickle
-from . import functions as func
+
+from doerffelbot.functions import download_vertretung
 
 
-# time control
 def daily_message(bot, job):
+
+    logging.info("Zeitsteuerung gestartet")
 
     with open("data/ids.set", 'rb') as doc:
         ids = pickle.load(doc)
 
-    print("Zeitsteuerung gestartet\n")
+    download_vertretung()
+    
+    with open("data/vertretung.pdf", "rb") as doc:
+        for chat in ids:
+            try:
+                bot.send_message(
+                    chat_id=chat, 
+                    text="Hier ist dein täglicher Vertretungsplan:")
+                bot.sendDocument(
+                    chat_id=chat, 
+                    document=doc)
 
-    func.download_vertretung()
-
-    for chat in ids:
-        try:
-            bot.send_message(
-                chat_id=chat, text="Hier ist dein täglicher Vertretungsplan:")
-            bot.sendDocument(chat_id=chat, document=open(
-                "data/vertretung.pdf", 'rb'))
-            print("Vertretungsplan zu "+str(chat)+" geschickt\n")
+                logging.info(f"Vertretungsplan zu {chat} geschickt")
         except:
-            print("Konnte Vertretungsplan nicht zu"+str(chat)+"senden.")
+            logging.error(f"Konnte Vertretungsplan nicht zu {chat} senden.")
+

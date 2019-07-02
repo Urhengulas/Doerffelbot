@@ -1,59 +1,31 @@
 # -*- coding: utf-8 -*-
 
-import datetime
 import logging
-from . import functions as func
-from . import auto_message as zet
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-import CONFIG as conf
 
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filter
 
-TOKEN = conf.TOKEN  # Token of @doerffelbot
-my_chat_id = conf.my_chat_id  # my own telegram-'chat id'
-
-# init updater: handle incoming messages
-updater = Updater(token=TOKEN)
-dispatcher = updater.dispatcher
-
-# configure error message logging
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
-
-# register all commands of the bot
-
-start_handler = CommandHandler('start', func.start)
-dispatcher.add_handler(start_handler)
-
-
-help_handler = CommandHandler('help', func.helpme)
-dispatcher.add_handler(help_handler)
-
-
-link_handler = CommandHandler('links', func.links)
-dispatcher.add_handler(link_handler)
-
-
-vertretung_handler = CommandHandler('vertretung', func.vertretung)
-dispatcher.add_handler(vertretung_handler)
-
-
-echo_handler = MessageHandler(Filters.text, func.react)
-dispatcher.add_handler(echo_handler)
-
-
-# init job queue: handles all schedules actions
-jobq = updater.job_queue
-
-# register daily substitution plan
-job_daily = jobq.run_daily(callback=zet.daily_message,
-                           time=datetime.time(hour=10, minute=35))
+from utilities import get_credentials, setup
 
 
 def main():
 
-    updater.start_polling()  # bots goes online
-    print("Dörffelbot started polling")
+    logging.basicConfig(
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        level=logging.INFO
+    )
+
+    TOKEN, _ = get_credentials()
+
+    updater = Updater(token=TOKEN)
+    dispatcher = updater.dispatcher
+
+    setup(updater, dispatcher)
+
+    updater.start_polling()
+    logging.info("Dörffelbot started polling")
+    updater.idle()
 
 
 if __name__ == '__main__':
     main()
+
